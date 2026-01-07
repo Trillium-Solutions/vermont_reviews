@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vermont Tracked Website Changes Viewer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F0F0F0;
+            color: #000;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        header {
+            margin-bottom: 30px;
+            border-bottom: 3px solid #003300;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 0;
+            color: #003300;
+        }
+
+        p.subtitle {
+            color: #666;
+            margin: 5px 0 0;
+        }
+
+        .instructions-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid #003300;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #000;
+        }
+
+        .instructions-box a {
+            color: #003300;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Group Styles */
+        .agency-group {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .agency-title {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: white;
+            background-color: #003300;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+        
+        .agency-title:hover {
+            background-color: #004d00;
+        }
+
+        .agency-title::after {
+            content: '▼';
+            margin-left: auto;
+            font-size: 0.8em;
+            transition: transform 0.2s;
+        }
+        
+        /* Collapsed State */
+        .agency-group.collapsed .agency-title::after {
+            transform: rotate(-90deg);
+        }
+
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .agency-group.collapsed .file-list {
+            display: none;
+        }
+
+        .file-item {
+            display: block;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-item:hover {
+            background-color: #e0e0e0;
+            color: #003300;
+        }
+        
+        /* Utility for hiding via search */
+        .hidden {
+            display: none !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Vermont Tracked Website Changes Viewer</h1>
+            <p class="subtitle">December 2025 • 36 Files</p>
+        </header>
+
+        <div class="instructions-box">
+            <p style="margin-top:0"><strong>Instructions:</strong></p>
+            <ul style="margin-bottom:0; padding-left: 20px;">
+                <li>Click an agency name to expand/collapse its files.</li>
+                <li>Click an "https link" button to review the changes (the link will open in a new window).</li>
+                <li><strong>Important:</strong> If a change is related to a <strong>GTFS schedule change</strong>, please email <a href="mailto:trillium.support@optibus.com">trillium.support@optibus.com</a> immediately.</li>
+            </ul>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Filter agencies or files..." onkeyup="filterContent()">
+        </div>
+
+        <div id="content-list">
+            <div class="agency-group"><div class="agency-title" onclick="toggleGroup(this)">Advance Transit AT</div><div class="file-list"><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_Versionista.mhtml')"> https   advancetransit.com Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_news_Versionista.mhtml')"> https   advancetransit.com news Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-blue-red_Versionista.mhtml')"> https   advancetransit.com routes route-blue-red Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-blue_Versionista.mhtml')"> https   advancetransit.com routes route-blue Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-brown_Versionista.mhtml')"> https   advancetransit.com routes route-brown Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-downtown-shuttle_Versionista.mhtml')"> https   advancetransit.com routes route-downtown-shuttle Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-enfield-canaan_Versionista.mhtml')"> https   advancetransit.com routes route-enfield-canaan Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-green_Versionista.mhtml')"> https   advancetransit.com routes route-green Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-lot-20_Versionista.mhtml')"> https   advancetransit.com routes route-lot-20 Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-orange_Versionista.mhtml')"> https   advancetransit.com routes route-orange Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-red_Versionista.mhtml')"> https   advancetransit.com routes route-red Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route-yellow_Versionista.mhtml')"> https   advancetransit.com routes route-yellow Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Advance_Transit_AT/Comparison_ https___advancetransit.com_routes_route_pink_Versionista.mhtml')"> https   advancetransit.com routes route pink Versionista</a></div></div><div class="agency-group"><div class="agency-title" onclick="toggleGroup(this)">Green Mountain Transit GMT</div><div class="file-list"><a class="file-item" onclick="openFile('VT htmls/December_2025/Green_Mountain_Transit_GMT/Comparison_ https___ridegmt.com_Versionista.mhtml')"> https   ridegmt.com Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Green_Mountain_Transit_GMT/Comparison_ https___ridegmt.com_category_service-alert_Versionista.mhtml')"> https   ridegmt.com category service-alert Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Green_Mountain_Transit_GMT/Comparison_ https___ridegmt.com_gmt-schedules_Versionista.mhtml')"> https   ridegmt.com gmt-schedules Versionista</a></div></div><div class="agency-group"><div class="agency-title" onclick="toggleGroup(this)">Lake Champlain Ferries</div><div class="file-list"><a class="file-item" onclick="openFile('VT htmls/December_2025/Lake_Champlain_Ferries/Comparison_ https___ferries.com_Versionista.mhtml')"> https   ferries.com Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Lake_Champlain_Ferries/Comparison_ https___ferries.com_vt-ny-ferry-routes_charlotte-vt-essex-ny_Versionista.mhtml')"> https   ferries.com vt-ny-ferry-routes charlotte-vt-essex-ny Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Lake_Champlain_Ferries/Comparison_ https___ferries.com_vt-ny-ferry-routes_charlotte-vt-essex-ny_special-schedule-charlotte-vt-essex-ny_Versionista.mhtml')"> https   ferries.com vt-ny-ferry-routes charlotte-vt-essex-ny special-schedule-charlotte-vt-essex-ny Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Lake_Champlain_Ferries/Comparison_ https___ferries.com_vt-ny-ferry-routes_grand-isle-vt-to-plattsburgh-ny_Versionista.mhtml')"> https   ferries.com vt-ny-ferry-routes grand-isle-vt-to-plattsburgh-ny Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Lake_Champlain_Ferries/Comparison_ https___ferries.com_vt-ny-ferry-routes_grand-isle-vt-to-plattsburgh-ny_special-schedule-grand-isle-vt-plattsburgh-ny_Versionista.mhtml')"> https   ferries.com vt-ny-ferry-routes grand-isle-vt-to-plattsburgh-ny special-schedule-grand-isle-vt-plattsburgh-ny Versionista</a></div></div><div class="agency-group"><div class="agency-title" onclick="toggleGroup(this)">MOOver</div><div class="file-list"><a class="file-item" onclick="openFile('VT htmls/December_2025/MOOver/Comparison_ https___www.moover.com_news_Versionista.mhtml')"> https   www.moover.com news Versionista</a></div></div><div class="agency-group"><div class="agency-title" onclick="toggleGroup(this)">Marble Valley The Bus</div><div class="file-list"><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_Versionista.mhtml')"> https   www.thebus.com Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_routes_city-fixed-south-route_Versionista.mhtml')"> https   www.thebus.com routes city-fixed-south-route Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_routes_city-fixed-west-route_Versionista.mhtml')"> https   www.thebus.com routes city-fixed-west-route Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_routes_fair-haven-route_Versionista.mhtml')"> https   www.thebus.com routes fair-haven-route Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_routes_ludlow-route_Versionista.mhtml')"> https   www.thebus.com routes ludlow-route Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_routes_manchester-route_Versionista.mhtml')"> https   www.thebus.com routes manchester-route Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_routes_middlebury-route-manchester_Versionista.mhtml')"> https   www.thebus.com routes middlebury-route-manchester Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_routes_middlebury-route_Versionista.mhtml')"> https   www.thebus.com routes middlebury-route Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Marble_Valley_The_Bus/Comparison_ https___www.thebus.com_rutland-killington-commuter_Versionista.mhtml')"> https   www.thebus.com rutland-killington-commuter Versionista</a></div></div><div class="agency-group"><div class="agency-title" onclick="toggleGroup(this)">Rural Community Transportation RCT</div><div class="file-list"><a class="file-item" onclick="openFile('VT htmls/December_2025/Rural_Community_Transportation_RCT/Comparison_ https___www.riderct.org_Versionista.mhtml')"> https   www.riderct.org Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Rural_Community_Transportation_RCT/Comparison_ https___www.riderct.org_bus-routes_Versionista.mhtml')"> https   www.riderct.org bus-routes Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Rural_Community_Transportation_RCT/Comparison_ https___www.riderct.org_news_Versionista.mhtml')"> https   www.riderct.org news Versionista</a></div></div><div class="agency-group"><div class="agency-title" onclick="toggleGroup(this)">Tri-Valley Transit TVT</div><div class="file-list"><a class="file-item" onclick="openFile('VT htmls/December_2025/Tri-Valley_Transit_TVT/Comparison_ https___www.trivalleytransit.org_Versionista.mhtml')"> https   www.trivalleytransit.org Versionista</a><a class="file-item" onclick="openFile('VT htmls/December_2025/Tri-Valley_Transit_TVT/Comparison_ https___www.trivalleytransit.org_rider-alerts_Versionista.mhtml')"> https   www.trivalleytransit.org rider-alerts Versionista</a></div></div>
+        </div>
+    </div>
+
+    <script>
+        function openFile(filename) {
+            fetch('/open_file?name=' + encodeURIComponent(filename))
+                .then(response => {
+                    if (response.ok) {
+                        console.log('File opened');
+                    } else {
+                        alert('Error opening file: ' + filename);
+                    }
+                });
+        }
+
+        function toggleGroup(header) {
+            header.parentElement.classList.toggle('collapsed');
+        }
+
+        function filterContent() {
+            const query = document.querySelector('.search-input').value.toLowerCase();
+            const items = document.querySelectorAll('.file-item');
+            const groups = document.querySelectorAll('.agency-group');
+
+            // Filter items
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            // Filter Groups
+            groups.forEach(group => {
+                const title = group.querySelector('.agency-title').textContent.toLowerCase();
+                const visibleItems = group.querySelectorAll('.file-item:not(.hidden)');
+                const titleMatch = title.includes(query);
+                
+                if (titleMatch) {
+                    // If agency matches, show all its items and uncollapse
+                    group.querySelectorAll('.file-item').forEach(i => i.classList.remove('hidden'));
+                    group.classList.remove('hidden');
+                    group.classList.remove('collapsed');
+                } else {
+                    if (visibleItems.length > 0) {
+                        group.classList.remove('hidden');
+                        // Expand if we found items inside
+                        group.classList.remove('collapsed');
+                    } else {
+                        group.classList.add('hidden');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
