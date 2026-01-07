@@ -14,6 +14,11 @@ SCAN_SUBDIR = "VT htmls/December_2025"
 PORT = 8000
 INDEX_FILE = "index.html"
 
+import mimetypes
+# Ensure .mhtml files are served with a content type that browsers might attempt to render (or at least handle correctly)
+mimetypes.add_type('application/x-mimearchive', '.mhtml')
+mimetypes.add_type('application/x-mimearchive', '.mht')
+
 # HTML Template for the Dashboard
 HTML_TEMPLATE = """
 <!DOCTYPE html>
