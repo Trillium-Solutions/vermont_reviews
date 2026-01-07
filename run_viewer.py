@@ -179,7 +179,7 @@ HTML_TEMPLATE = """
             <p style="margin-top:0"><strong>Instructions:</strong></p>
             <ul style="margin-bottom:0; padding-left: 20px;">
                 <li>Click an agency name to expand/collapse its files.</li>
-                <li>Click an "https link" button to review the changes (the link will open in a new window).</li>
+                <li>Click an "https link" button to review the changes (opens in a new tab).</li>
                 <li><strong>Important:</strong> If a change needs to be reflected in your <strong>GTFS data feed</strong>, please notify our data technicians. Send an email to <a href="mailto:gtfs.support@optibus.com">gtfs.support@optibus.com</a>,  including the relevant URL(s) and any additional notes on the change(s) you would like us to make.</li>
             </ul>
         </div>
@@ -194,16 +194,7 @@ HTML_TEMPLATE = """
     </div>
 
     <script>
-        function openFile(filename) {
-            fetch('/open_file?name=' + encodeURIComponent(filename))
-                .then(response => {
-                    if (response.ok) {
-                        console.log('File opened');
-                    } else {
-                        alert('Error opening file: ' + filename);
-                    }
-                });
-        }
+
 
         function toggleGroup(header) {
             header.parentElement.classList.toggle('collapsed');
@@ -288,8 +279,11 @@ def generate_index_html(server_root, scan_subdir):
                     # Scan subdir + folder + filename
                     rel_path = os.path.join(scan_subdir, item, f)
                     
-                    # File Item with onclick (Removed the explicitly appended newline)
-                    group_html += f'<a class="file-item" onclick="openFile(\'{rel_path}\')">{display_name}</a>'
+                    # URL encode the path for the href
+                    url_path = urllib.parse.quote(rel_path)
+                    
+                    # File Item with href
+                    group_html += f'<a class="file-item" href="{url_path}" target="_blank">{display_name}</a>'
                     total_files += 1
                 
                 group_html += '</div></div>'
@@ -307,44 +301,12 @@ def generate_index_html(server_root, scan_subdir):
     print(f"Generated {INDEX_FILE} in {server_root} with {total_files} files.")
     return total_files
 
-class MHTMLRequestHandler(http.server.SimpleHTTPRequestHandler):
-    """Custom handler for local file launching."""
-    def do_GET(self):
-        if self.path.startswith('/open_file'):
-            try:
-                query = urllib.parse.urlparse(self.path).query
-                params = urllib.parse.parse_qs(query)
-                filename = params.get('name', [None])[0]
-                
-                if filename:
-                    # Security Check: allow relative paths but block traversal
-                    if '..' in filename:
-                         self.send_error(400, "Invalid filename")
-                         return
 
-                    file_path = os.path.join(os.getcwd(), filename)
-                    if os.path.exists(file_path):
-                        print(f"Opening in Chrome: {file_path}")
-                        subprocess.run(['open', '-a', 'Google Chrome', file_path])
-                        
-                        self.send_response(200)
-                        self.end_headers()
-                        self.wfile.write(b"OK")
-                        return
-                    else:
-                         self.send_error(404, "File not found")
-                         return
-            except Exception as e:
-                print(f"Error handling open request: {e}")
-                self.send_error(500, str(e))
-                return
-        
-        return super().do_GET()
 
 def run_server(directory, port):
     """Starts the http server in the target directory."""
     os.chdir(directory)
-    handler = MHTMLRequestHandler
+    handler = http.server.SimpleHTTPRequestHandler
     
     print(f"Serving directory: {directory}")
 
